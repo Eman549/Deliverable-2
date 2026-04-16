@@ -1,0 +1,71 @@
+3. The dataset is titled "Library Survey Data (2015-2024)" and contains responses from students about their experiences with the library. It includes 381 student responses, and each response comes from a survey conducted between 2015 and 2024. The dataset has 54 vaiables covering demographics, library usage, satisfaction ratings, opinions about service, and open-ended comments. This is a survey dataset, meaning the data comes from students answering questions rather than being automatically recorded. The most important fields are the Demogrpahs (comparing groups of students), Satisfaction (shows how students feel about the library), Library USage(frequent vs. infrequent users), Perceptions of services(what students think), Activities in the library(how students use the library), Open-ended responses(themes and suggestions for improvements). The dataset includes both numerical ratings and open-ended text, allowing for both statistical and thematic analysis. The unit of analysis is one student survey response. Each row is equal to one student, and each column equals something about that student and how or what their answer was.
+5. The analytics task for my question is regression/estimation because we are analyzing how different survey variables predict or are associated with students overall satisfaction with the library.
+6. 
+1. Load the Data 
+We first load the dataset and inspect its structure to understand available variables. 
+import pandas as pd 
+df = pd.read_excel("Library Survey Data (2015-2024).xlsx") 
+df.head() 
+
+2. Prepare Data for Analysis 
+Convert survey responses to numeric values where possible so correlations can be computed.
+ df_numeric = df.copy() 
+for col in df_numeric.columns:
+ df_numeric[col] = pd.to_numeric(df_numeric[col], errors='coerce') 
+
+3. Compute Correlations with Satisfaction 
+We calculate correlations between all variables and overall satisfaction 
+(Q1 Satisfaction). target = "Q1 Satisfaction" 
+corr = df_numeric.corr(numeric_only=True)[target].dropna().sort_values(ascending=False) corr = corr[corr.index != target]
+ corr.head(10) 
+
+4. Results 
+The variables with the strongest positive association with satisfaction are: 
+Q4-10 Computers
+ Q4-1 Books 
+Q4-11 Circulation services / Front Desk 
+Q4-15 Library website 
+Q4-3 Reference materials 
+Q4-5 Electronic resources 
+Q4-9 Building environment 
+Q4-7 Staff ability to answer questions 
+Q4-17 MediaPLEX
+ Q4-12 Library catalog
+
+ 5. Interpretation 
+These results show that satisfaction is most strongly related to ratings of library services, including technology, resources, staff, and environment.
+
+Cross-Validation
+7. 
+import pandas as pd
+from sklearn.model_selection import cross_val_score
+from sklearn.linear_model import LogisticRegression
+
+# load data
+df = pd.read_excel("Library Survey Data (2015-2024).xlsx")
+
+# select key variables
+cols = ["Q1 Satisfaction","Q4-10 Computers","Q4-1       Books","Q4-11       Circ services/ Front Desk"]
+data = df[cols].dropna()
+
+# create binary outcome (high vs low satisfaction)
+data["high_sat"] = (data["Q1 Satisfaction"] >= data["Q1 Satisfaction"].median()).astype(int)
+
+# features and target
+X = data.drop(columns=["Q1 Satisfaction","high_sat"])
+y = data["high_sat"]
+
+# model
+model = LogisticRegression(max_iter=1000)
+
+# 5-fold cross-validation
+scores = cross_val_score(model, X, y, cv=5, scoring="accuracy")
+
+scores
+scores = [0.986, 0.986, 0.986, 0.973, 0.918]
+A logistic regression model was evaluated using 5-fold cross-validation, achieving an average accuracy of about 97%. This indicates that service-related variables (such as computers, books, and front desk services) are very strong predictors of high satisfaction. The consistent performance across folds shows the model is stable and reliable, not dependent on a single train/test split.
+
+8. Expected Value
+The model was evaluated using an expected value framework rather than accuracy alone. Since the goal is to identify dissatisfied students, false negatives (failing to detect unhappy students) carry a higher cost than false positives (unnecessary outreach). Therefore, the best model is one that minimizes false negatives, even at the expense of slightly more false positives. The logistic regression model performed well, with high accuracy and likely low false negatives, indicating a high expected value. However, model selection should prioritize reducing missed dissatisfied students rather than maximizing accuracy alone.
+
+9. 
