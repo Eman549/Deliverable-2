@@ -68,4 +68,20 @@ A logistic regression model was evaluated using 5-fold cross-validation, achievi
 8. Expected Value
 The model was evaluated using an expected value framework rather than accuracy alone. Since the goal is to identify dissatisfied students, false negatives (failing to detect unhappy students) carry a higher cost than false positives (unnecessary outreach). Therefore, the best model is one that minimizes false negatives, even at the expense of slightly more false positives. The logistic regression model performed well, with high accuracy and likely low false negatives, indicating a high expected value. However, model selection should prioritize reducing missed dissatisfied students rather than maximizing accuracy alone.
 
-9. 
+9. Summary of main findings include ratings of specific library services (Q4 variables) are most strongly associated with overall satisfaction including computers, staff support, and the building environment. These variables had the strongest relationship with Q1 Satisfaction, indicating that students overall impressions are largely driven by their experiences with the core services.
+A logistic regression model was used to classify students as having high or low satisfaction. Using 5-fold cross-validation, the model achieved consistently high accuracy (~97%).
+
+More importantly, when evaluated using an expected value framework, the model performs well because it likely:
+
+Correctly identifies most dissatisfied students (true positives)
+Minimizes costly missed cases (false negatives)
+
+This makes it useful for decision-making, not just prediction.
+
+The analysis also showed that false neagtives (missing dissatisfied students) are more costly than false positives, so models should priorotize identifying at-risk students, even if it leads toi some unnecessary outreach. This shifts the focus from pure accuracy to practical impact and value.
+This means for the library, which is the stakeholder, that satisfcation is driven by service quality. Students' overall satisfaction is not abstract, but directly tied to access to resources, quality fo staff interactions, how reliable the technology is, and the comfort of the space.
+This also means it is possible to idnetify students who may be dissatisfied, and take action before dissatisfaction becomes a larger issue, which enables a proactive service strategy.
+This also means since multiple service areas are strongly tied to satisfaction, improvements in those areas can lead to meaningful gains in overall student experiences.
+
+Some recommendations would be prioritize high-impact service efforts to improve like computer access and availability of books, offer support to the students likely to be dissatisfied, monitor through surverys and watch for declines in areas, and analyze the open-ended responses further.
+Oveall, the analysis shows that student satisfaction is strongly tied to tangible aspects of library services, and these relationships can be used to guide decisions. While the model performs well, its greatest value lies in helping the library identify and support dissatisfied students early, rather than simply predicting outcomes.
